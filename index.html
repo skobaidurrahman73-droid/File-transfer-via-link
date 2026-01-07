@@ -3,96 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Cloud | ওবায়দুর রহমান</title>
+    <title>TERMINAL | BY OBADUR</title>
     <style>
-        :root { --p: #00f2fe; --bg: #0b0e14; }
-        body { font-family: sans-serif; background: var(--bg); color: white; text-align: center; padding: 20px; min-height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .card { background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 25px; border: 1px solid var(--p); max-width: 450px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .btn { background: var(--p); color: #000; border: none; padding: 15px; border-radius: 50px; font-weight: bold; width: 100%; cursor: pointer; margin-top: 15px; font-size: 16px; transition: 0.3s; }
-        .btn:disabled { background: #333; color: #777; }
-        #loader { display: none; margin-top: 20px; color: var(--p); }
-        .link-box { background: #000; padding: 15px; border-radius: 10px; border: 1px solid #444; word-break: break-all; margin-top: 15px; font-family: monospace; }
+        :root { --neon: #00ff41; --bg: #050505; --dark-red: #ff003c; }
+        body { background: var(--bg); color: var(--neon); font-family: 'Courier New', monospace; margin: 0; padding: 20px; overflow-x: hidden; }
+        .container { max-width: 600px; margin: auto; border: 1px solid var(--neon); padding: 30px; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 255, 65, 0.2); background: rgba(0,0,0,0.9); }
+        .profile { width: 120px; height: 120px; border-radius: 50%; border: 2px solid var(--neon); filter: grayscale(100%) contrast(1.2); box-shadow: 0 0 15px var(--neon); margin-bottom: 20px; }
+        input { background: #000; border: 1px solid var(--neon); color: var(--neon); padding: 12px; width: 100%; border-radius: 5px; margin: 15px 0; box-sizing: border-box; outline: none; }
+        .btn { background: var(--neon); color: #000; border: none; padding: 15px; width: 100%; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
+        .btn:hover { background: #000; color: var(--neon); border: 1px solid var(--neon); box-shadow: 0 0 20px var(--neon); }
+        .matrix-text { font-size: 12px; opacity: 0.5; margin-bottom: 20px; }
+        #link-res, #target-ui { display: none; margin-top: 20px; }
+        .step-box { border: 1px solid var(--dark-red); padding: 15px; text-align: center; }
+        .progress { height: 5px; background: #222; margin: 10px 0; }
+        .fill { height: 100%; background: var(--neon); transition: 0.4s; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <img src="IMG_20251230_153830.jpg" style="width:100px; border-radius:50%; border:2px solid var(--p);">
-    <h2 id="title">ফাইল শেয়ারিং সেন্টার</h2>
+<div class="container">
+    <img src="IMG_20251230_153830.jpg" class="profile" alt="Admin Obadur">
+    <div class="matrix-text">SYSTEM STATUS: ENCRYPTED // ADMIN: OBADUR</div>
 
-    <div id="up-ui">
-        <input type="file" id="fileInp" style="display:none" onchange="document.getElementById('fn').innerText=this.files[0].name; document.getElementById('upBtn').disabled=false;">
-        <div style="border: 2px dashed #444; padding: 20px; border-radius: 15px; cursor: pointer;" onclick="document.getElementById('fileInp').click()">
-            <p id="fn">ফাইল নির্বাচন করুন</p>
+    <div id="gen-ui">
+        <h2>ROOT ACCESS: LINK BYPASS</h2>
+        <p>গুগল ড্রাইভ লিঙ্কটি এখানে পেস্ট করুন:</p>
+        <input type="text" id="driveURL" placeholder="https://drive.google.com/...">
+        <button class="btn" onclick="generateSecureLink()">লিঙ্ক জেনারেট করুন</button>
+
+        <div id="link-res">
+            <p style="color: yellow;">লিঙ্ক এনক্রিপ্ট হয়েছে:</p>
+            <input type="text" id="finalURL" readonly>
+            <button class="btn" style="background: #fff;" onclick="copyLink()">📋 লিঙ্ক কপি করুন</button>
         </div>
-        <button class="btn" id="upBtn" onclick="handleUpload()" disabled>লিঙ্ক জেনারেট করুন</button>
-        <div id="loader">⚙️ প্রসেসিং হচ্ছে... দয়া করে অপেক্ষা করুন।</div>
     </div>
 
-    <div id="res-ui" style="display:none;">
-        <p style="color: #ffd700;">✅ আপনার রিয়েল লিঙ্ক প্রস্তুত!</p>
-        <div class="link-box" id="urlBox"></div>
-        <button class="btn" onclick="copyNow()">📋 লিঙ্ক কপি করুন</button>
-    </div>
-
-    <div id="dl-ui" style="display:none;">
-        <p id="stepTxt">ধাপ ১: বিজ্ঞাপন দেখে ফাইল আনলক করুন</p>
-        <button class="btn" onclick="goNext()">এগিয়ে যান</button>
+    <div id="target-ui">
+        <h2 style="color: var(--dark-red);">ACCESS DENIED!</h2>
+        <p id="status-msg">ফাইলটি ডাউনলোড করতে ১০টি সিকিউরিটি গেট আনলক করুন।</p>
+        <div class="progress"><div class="fill" id="p-bar" style="width: 10%;"></div></div>
+        <div class="step-box">
+            <span id="step-count">ধাপ: ১ / ১০</span>
+            <button class="btn" style="margin-top:15px; background:var(--dark-red); color:#fff;" onclick="bypassStep()">গেট আনলক করুন ➔</button>
+        </div>
     </div>
 </div>
 
 <script>
-    const AD = "https://www.effectivegatecpm.com/w6arakqmr0?key=cfe5b3bf60645ca848c57f56fdc4be23";
-    let finalURL = ""; let step = 1;
+    const AD_LINK = "https://www.effectivegatecpm.com/w6arakqmr0?key=cfe5b3bf60645ca848c57f56fdc4be23";
+    let currentStep = 1;
 
-    async function handleUpload() {
-        const file = document.getElementById('fileInp').files[0];
-        window.open(AD, "_blank"); // ইনকাম ১
-        document.getElementById('upBtn').style.display = 'none';
-        document.getElementById('loader').style.display = 'block';
-
-        const formData = new FormData();
-        formData.append('file', file);
-
-        try {
-            // ১. ফাইল আপলোড চেষ্টা
-            const res = await fetch('https://file.io', { method: 'POST', body: formData });
-            const data = await res.json();
-            
-            if(data.success) {
-                const mySite = window.location.href.split('?')[0];
-                finalURL = mySite + "?file=" + btoa(data.link);
-                document.getElementById('urlBox').innerText = finalURL;
-                document.getElementById('up-ui').style.display = 'none';
-                document.getElementById('res-ui').style.display = 'block';
-            } else { throw new Error(); }
-        } catch(e) {
-            alert("সার্ভার ব্যস্ত! আবার চেষ্টা করুন।");
-            location.reload();
-        }
-    }
-
-    function copyNow() {
-        navigator.clipboard.writeText(finalURL);
-        alert("লিঙ্কটি সত্যি কপি হয়েছে!");
-    }
-
-    window.onload = function() {
-        const p = new URLSearchParams(window.location.search);
-        if(p.has('file')) {
-            document.getElementById('up-ui').style.display = 'none';
-            document.getElementById('dl-ui').style.display = 'block';
-        }
-    }
-
-    function goNext() {
-        window.open(AD, "_blank"); // ইনকাম ২, ৩, ৪
-        if(step < 3) {
-            step++;
-            document.getElementById('stepTxt').innerText = "ধাপ " + step + ": আরও বিজ্ঞাপন দেখুন";
+    // ১. আপনার জন্য অ্যাড-ফ্রি জেনারেশন
+    function generateSecureLink() {
+        const input = document.getElementById('driveURL').value;
+        if(input.includes("drive.google.com")) {
+            const base = window.location.href.split('?')[0];
+            const encoded = btoa(input);
+            document.getElementById('finalURL').value = base + "?access=" + encoded;
+            document.getElementById('link-res').style.display = 'block';
         } else {
-            const p = new URLSearchParams(window.location.search);
-            window.location.href = atob(p.get('file'));
+            alert("সঠিক ড্রাইভ লিঙ্ক দিন!");
+        }
+    }
+
+    function copyLink() {
+        const copyText = document.getElementById('finalURL');
+        copyText.select();
+        navigator.clipboard.writeText(copyText.value);
+        alert("লিঙ্ক কপি হয়েছে! এটি আপনার বন্ধুকে পাঠান।");
+    }
+
+    // ২. বন্ধুর জন্য ১০-ধাপের অ্যাড সিস্টেম
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if(urlParams.has('access')) {
+            document.getElementById('gen-ui').style.display = 'none';
+            document.getElementById('target-ui').style.display = 'block';
+        }
+    }
+
+    function bypassStep() {
+        window.open(AD_LINK, "_blank");
+        
+        if(currentStep < 10) {
+            currentStep++;
+            document.getElementById('step-count').innerText = "ধাপ: " + currentStep + " / ১০";
+            document.getElementById('p-bar').style.width = (currentStep * 10) + "%";
+            document.getElementById('status-msg').innerText = "গেট " + (currentStep-1) + " সফলভাবে বাইপাস হয়েছে।";
+        } else {
+            const urlParams = new URLSearchParams(window.location.search);
+            const rawLink = atob(urlParams.get('access'));
+            alert("সব গেট আনলক হয়েছে! ড্রাইভ ফাইল ওপেন হচ্ছে...");
+            window.location.href = rawLink;
         }
     }
 </script>
