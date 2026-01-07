@@ -1,99 +1,42 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin: ওবায়দুর রহমান | ফাইল ট্রান্সফার</title>
+    <title>Admin: ওবায়দুর রহমান | ফাইল শেয়ারিং</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #0f0c29; color: white; text-align: center; margin: 0; padding: 20px; }
-        .card { background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 25px; backdrop-filter: blur(15px); border: 1px solid #00f2fe; max-width: 450px; margin: auto; }
-        .profile-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid #00f2fe; box-shadow: 0 0 20px #00f2fe; margin-bottom: 10px; object-fit: cover; }
-        .welcome-msg { color: #ffd700; font-size: 14px; margin-bottom: 10px; }
-        h2 { font-size: 20px; color: #00f2fe; margin-bottom: 5px; }
-        .upload-box { border: 2px dashed #00f2fe; padding: 20px; border-radius: 15px; margin: 20px 0; cursor: pointer; background: rgba(0, 242, 254, 0.05); }
-        .btn { background: linear-gradient(90deg, #00c853, #b2ff59); color: black; border: none; padding: 15px; border-radius: 50px; font-weight: bold; width: 100%; cursor: pointer; font-size: 16px; margin-top: 10px; }
-        #copy-section, #download-section { display: none; margin-top: 20px; padding: 15px; background: #1a1a2e; border-radius: 10px; border: 1px solid #ffd700; }
+        .card { background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 25px; backdrop-filter: blur(15px); border: 1px solid #00f2fe; max-width: 400px; margin: auto; }
+        .profile-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #00f2fe; margin-bottom: 10px; }
+        h2 { font-size: 18px; color: #00f2fe; }
+        .btn { background: linear-gradient(90deg, #00c853, #b2ff59); color: black; border: none; padding: 15px; border-radius: 50px; font-weight: bold; width: 100%; cursor: pointer; font-size: 16px; margin-top: 15px; text-decoration: none; display: block; }
     </style>
 </head>
 <body>
 
 <div class="card">
     <img src="IMG_20251230_153830.jpg" class="profile-img">
-    <div class="welcome-msg" id="welcomeText">✨ আসসালামু আলাইকুম! ওবায়দুরের পক্ষ থেকে স্বাগতম ✨</div>
     <h2>👤 Admin: ওবায়দুর রহমান 😎</h2>
+    <p>ফাইল শেয়ার করে ইনকাম করুন 🚀</p>
 
     <div id="main-ui">
-        <div class="upload-box" onclick="document.getElementById('f').click()">
-            <p id="fn">📁 আপলোড করুন</p>
-            <input type="file" id="f" style="display:none" onchange="saveFile()">
+        <div style="border: 2px dashed #00f2fe; padding: 20px; border-radius: 15px; margin-bottom: 15px;">
+            <p>📁 ফাইল আপলোড করার জন্য প্রস্তুত</p>
         </div>
-        <button class="btn" id="genBtn" onclick="genLink()">🔗 লিঙ্ক জেনারেট করুন ✨</button>
-    </div>
-
-    <div id="copy-section">
-        <p style="color:#ffd700">লিঙ্ক তৈরি হয়েছে! ✅</p>
-        <button class="btn" style="background:#ffd700" onclick="copyLink()">📋 লিঙ্ক কপি করুন</button>
-    </div>
-
-    <div id="download-section">
-        <p>আপনার বন্ধু আপনাকে একটি ফাইল পাঠিয়েছে 📁</p>
-        <button class="btn" onclick="startDownload()">⬇️ ডাউনলোড করুন</button>
+        <button class="btn" onclick="goToAd()">🔗 লিঙ্ক জেনারেট করুন ✨</button>
     </div>
 </div>
 
 <script>
-    function saveFile() {
-        const file = document.getElementById('f').files[0];
-        if (file) {
-            document.getElementById('fn').innerText = "✅ সিলেক্ট হয়েছে: " + file.name;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                localStorage.setItem('tempFile', e.target.result);
-                localStorage.setItem('tempFileName', file.name);
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-
-    if(window.location.search.includes('file=')) {
-        document.getElementById('main-ui').style.display = 'none';
-        document.getElementById('download-section').style.display = 'block';
-    }
-
-    function genLink() {
-        if(!localStorage.getItem('tempFile')) return alert("আগে ফাইল আপলোড করুন!");
-        document.getElementById('genBtn').innerText = "প্রসেসিং হচ্ছে... ⏳";
+    function goToAd() {
+        alert("লিঙ্কটি তৈরি হচ্ছে... আগে একটি বিজ্ঞাপন দেখুন।");
+        // আপনার দেওয়া Adsterra Direct Link
+        window.open("https://www.effectivegatecpm.com/w6arakqmr0?key=cfe5b3bf60645ca848c57f56fdc4be23", "_blank");
+        
+        // বিজ্ঞাপন দেখার পর তাকে সাকিবের কাঙ্ক্ষিত গন্তব্যে পাঠানো যাবে
         setTimeout(() => {
-            document.getElementById('main-ui').style.display = 'none';
-            document.getElementById('copy-section').style.display = 'block';
-        }, 1500);
-    }
-
-    function copyLink() {
-        const link = window.location.href.split('?')[0] + "?file=active";
-        navigator.clipboard.writeText(link).then(() => {
-            alert("লিঙ্ক কপি হয়েছে! বন্ধুকে পাঠান।");
-            window.location.href = window.location.href.split('?')[0];
-        });
-    }
-
-    function startDownload() {
-        const fileData = localStorage.getItem('tempFile');
-        const fileName = localStorage.getItem('tempFileName');
-        if (fileData) {
-            const a = document.createElement("a");
-            a.href = fileData;
-            a.download = fileName;
-            a.click();
-            alert("ডাউনলোড শুরু হয়েছে! 🚀");
-            setTimeout(() => {
-                localStorage.clear();
-                window.location.href = window.location.href.split('?')[0];
-            }, 2000);
-        } else {
-            alert("ফাইলটি খুঁজে পাওয়া যায়নি! ❌");
-        }
+            alert("ধন্যবাদ! আপনার লিঙ্কটি এখন প্রস্তুত।");
+        }, 2000);
     }
 </script>
 
