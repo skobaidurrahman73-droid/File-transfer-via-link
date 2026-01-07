@@ -8,68 +8,78 @@
         body { font-family: sans-serif; background: #0b0e14; color: white; text-align: center; padding: 20px; }
         .card { background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 20px; border: 1px solid #00f2fe; max-width: 400px; margin: auto; box-shadow: 0 0 20px #00f2fe; }
         .btn { background: #00c853; color: black; border: none; padding: 15px; border-radius: 50px; font-weight: bold; width: 100%; cursor: pointer; margin-top: 15px; font-size: 16px; }
-        #link-section, #download-section { display: none; margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.4); border-radius: 10px; }
-        input[type="file"] { display: none; }
+        #output-section, #download-ui { display: none; margin-top: 20px; }
+        input[type="text"] { width: 90%; padding: 12px; margin-top: 10px; border-radius: 10px; border: none; }
     </style>
 </head>
 <body>
 
 <div class="card">
     <img src="IMG_20251230_153830.jpg" style="width:90px; border-radius:50%; border:2px solid #00f2fe; margin-bottom:10px;">
-    <h2>ফাইল শেয়ারিং সেন্টার</h2>
-
-    <div id="upload-ui">
-        <input type="file" id="fileInput" onchange="fileChosen()">
-        <button class="btn" onclick="document.getElementById('fileInput').click()">📁 ফাইল নির্বাচন করুন</button>
-        
-        <div id="link-section">
-            <p id="fileName" style="color:#00f2fe;"></p>
-            <button class="btn" style="background:#ffd700;" onclick="generateLink()">🔗 লিঙ্ক জেনারেট করুন</button>
-        </div>
+    
+    <div id="main-ui">
+        <h2>ফাইল শেয়ারিং</h2>
+        <p>আপনার ফাইল ড্রাইভ লিঙ্কটি এখানে দিন:</p>
+        <input type="text" id="driveLink" placeholder="ড্রাইভ লিঙ্ক পেস্ট করুন">
+        <button class="btn" onclick="makeLink()">🔗 লিঙ্ক জেনারেট ও কপি করুন</button>
     </div>
 
-    <div id="download-section">
-        <p id="step-text">ধাপ ১: ফাইলটি পেতে বিজ্ঞাপন দেখুন</p>
-        <button class="btn" id="action-btn" onclick="handleDownloadSteps()">বিজ্ঞাপন দেখে এগিয়ে যান</button>
+    <div id="output-section">
+        <p style="color:#ffd700;">লিঙ্কটি কপি হয়ে গেছে! আপনার বন্ধুকে পাঠান।</p>
+        <code id="finalURL" style="background:#222; padding:5px; display:block;"></code>
+    </div>
+
+    <div id="download-ui">
+        <h2 id="step-text">ধাপ ১: বিজ্ঞাপন দেখুন</h2>
+        <button class="btn" onclick="nextStep()">এগিয়ে যান</button>
     </div>
 </div>
 
 <script>
     const adLink = "https://www.effectivegatecpm.com/w6arakqmr0?key=cfe5b3bf60645ca848c57f56fdc4be23";
-    let selectedFileUrl = "";
-    let stepCount = 1;
+    let step = 1;
 
-    function fileChosen() {
-        const file = document.getElementById('fileInput').files[0];
-        if (file) {
-            selectedFileUrl = URL.createObjectURL(file);
-            document.getElementById('fileName').innerText = "ফাইল: " + file.name;
-            document.getElementById('link-section').style.display = 'block';
+    // ১. লিঙ্ক জেনারেট ও আসল কপি করা
+    function makeLink() {
+        const linkInput = document.getElementById('driveLink').value;
+        if(linkInput.includes("http")) {
+            window.open(adLink, "_blank"); // আপনার ইনকাম
+            const siteURL = window.location.href.split('?')[0];
+            const encoded = btoa(linkInput);
+            const fullLink = siteURL + "?file=" + encoded;
+            
+            // লিঙ্কটি সত্যি কপি করা
+            navigator.clipboard.writeText(fullLink);
+            document.getElementById('finalURL').innerText = fullLink;
+            document.getElementById('main-ui').style.display = 'none';
+            document.getElementById('output-section').style.display = 'block';
+            alert("আপনার ইনকাম লিঙ্কটি সত্যি কপি হয়েছে!");
+        } else {
+            alert("সঠিক লিঙ্ক দিন");
         }
     }
 
-    function generateLink() {
-        window.open(adLink, "_blank");
-        alert("লিঙ্ক জেনারেট হয়েছে! এখন আপনার বন্ধুকে এই ফোনটি দিন বা তাকে ডাউনলোড বাটনে চাপ দিতে বলুন।");
-        document.getElementById('upload-ui').style.display = 'none';
-        document.getElementById('download-section').style.display = 'block';
+    // ২. বন্ধু লিঙ্কে ঢুকলে যা হবে
+    window.onload = function() {
+        const params = new URLSearchParams(window.location.search);
+        if(params.has('file')) {
+            document.getElementById('main-ui').style.display = 'none';
+            document.getElementById('download-ui').style.display = 'block';
+        }
     }
 
-    function handleDownloadSteps() {
-        window.open(adLink, "_blank");
-        
-        if (stepCount === 1) {
-            document.getElementById('step-text').innerText = "ধাপ ২: আপনার আর ২ বার অ্যাড দেখতে হবে";
-            stepCount = 2;
-        } else if (stepCount === 2) {
-            document.getElementById('step-text').innerText = "ধাপ ৩: আপনার আর ১ বার অ্যাড দেখতে হবে";
-            stepCount = 3;
+    function nextStep() {
+        window.open(adLink, "_blank"); // প্রতি ক্লিকে ইনকাম
+        if(step === 1) {
+            document.getElementById('step-text').innerText = "ধাপ ২: আর ২ বার বিজ্ঞাপন দেখুন";
+            step = 2;
+        } else if(step === 2) {
+            document.getElementById('step-text').innerText = "ধাপ ৩: আর ১ বার বিজ্ঞাপন দেখুন";
+            step = 3;
         } else {
-            alert("সব ধাপ শেষ! ডাউনলোড শুরু হচ্ছে...");
-            const a = document.createElement('a');
-            a.href = selectedFileUrl;
-            a.download = document.getElementById('fileInput').files[0].name;
-            a.click();
+            const params = new URLSearchParams(window.location.search);
+            const originalFile = atob(params.get('file'));
+            window.location.href = originalFile; // সব শেষে ডাউনলোড
         }
     }
 </script>
