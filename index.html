@@ -3,56 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin: ওবায়দুর রহমান</title>
+    <title>প্রফেশনাল ফাইল শেয়ার | ওবায়দুর রহমান</title>
     <style>
-        body { font-family: sans-serif; background: #0f0c29; color: white; text-align: center; padding: 20px; }
-        .card { background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 20px; border: 1px solid #00f2fe; max-width: 400px; margin: auto; }
-        .btn { background: #00c853; color: black; border: none; padding: 15px; border-radius: 50px; font-weight: bold; width: 100%; cursor: pointer; margin-top: 15px; text-decoration: none; display: block; }
-        #step-box { display: none; margin-top: 20px; }
+        body { font-family: sans-serif; background: #0b0e14; color: white; text-align: center; padding: 20px; }
+        .card { background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 20px; border: 1px solid #00f2fe; max-width: 400px; margin: auto; box-shadow: 0 0 20px #00f2fe; }
+        .btn { background: #00c853; color: black; border: none; padding: 15px; border-radius: 50px; font-weight: bold; width: 100%; cursor: pointer; margin-top: 15px; font-size: 16px; }
+        #link-section, #download-section { display: none; margin-top: 20px; padding: 15px; background: rgba(0,0,0,0.4); border-radius: 10px; }
+        input[type="file"] { display: none; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <img src="IMG_20251230_153830.jpg" style="width:100px; border-radius:50%; border:2px solid #00f2fe;">
-    <h2>ওবায়দুর রহমান</h2>
+    <img src="IMG_20251230_153830.jpg" style="width:90px; border-radius:50%; border:2px solid #00f2fe; margin-bottom:10px;">
+    <h2>ফাইল শেয়ারিং সেন্টার</h2>
 
-    <div id="upload-part">
-        <button class="btn" onclick="startUpload()">📁 ফাইল আপলোড করুন</button>
+    <div id="upload-ui">
+        <input type="file" id="fileInput" onchange="fileChosen()">
+        <button class="btn" onclick="document.getElementById('fileInput').click()">📁 ফাইল নির্বাচন করুন</button>
+        
+        <div id="link-section">
+            <p id="fileName" style="color:#00f2fe;"></p>
+            <button class="btn" style="background:#ffd700;" onclick="generateLink()">🔗 লিঙ্ক জেনারেট করুন</button>
+        </div>
     </div>
 
-    <div id="step-box">
+    <div id="download-section">
         <p id="step-text">ধাপ ১: ফাইলটি পেতে বিজ্ঞাপন দেখুন</p>
-        <button class="btn" id="action-btn" onclick="handleSteps()">বিজ্ঞাপন দেখে এগিয়ে যান</button>
+        <button class="btn" id="action-btn" onclick="handleDownloadSteps()">বিজ্ঞাপন দেখে এগিয়ে যান</button>
     </div>
 </div>
 
 <script>
     const adLink = "https://www.effectivegatecpm.com/w6arakqmr0?key=cfe5b3bf60645ca848c57f56fdc4be23";
-    const driveLink = "https://drive.google.com/drive/folders/1YGiGnVKkgvrDLBeesQfMoqdAKIU6J1w5";
-    let currentStep = 1;
+    let selectedFileUrl = "";
+    let stepCount = 1;
 
-    // সাকিবের জন্য
-    function startUpload() {
-        window.open(adLink, "_blank");
-        alert("লিঙ্কটি কপি হয়েছে! আপনার বন্ধুকে পাঠান।");
-        document.getElementById('upload-part').style.display = 'none';
-        document.getElementById('step-box').style.display = 'block';
+    function fileChosen() {
+        const file = document.getElementById('fileInput').files[0];
+        if (file) {
+            selectedFileUrl = URL.createObjectURL(file);
+            document.getElementById('fileName').innerText = "ফাইল: " + file.name;
+            document.getElementById('link-section').style.display = 'block';
+        }
     }
 
-    // বন্ধুর জন্য ৩ ধাপ
-    function handleSteps() {
+    function generateLink() {
+        window.open(adLink, "_blank");
+        alert("লিঙ্ক জেনারেট হয়েছে! এখন আপনার বন্ধুকে এই ফোনটি দিন বা তাকে ডাউনলোড বাটনে চাপ দিতে বলুন।");
+        document.getElementById('upload-ui').style.display = 'none';
+        document.getElementById('download-section').style.display = 'block';
+    }
+
+    function handleDownloadSteps() {
         window.open(adLink, "_blank");
         
-        if (currentStep === 1) {
+        if (stepCount === 1) {
             document.getElementById('step-text').innerText = "ধাপ ২: আপনার আর ২ বার অ্যাড দেখতে হবে";
-            currentStep = 2;
-        } else if (currentStep === 2) {
-            document.getElementById('step-text').innerText = "ধাপ ৩: শেষ ধাপ! আর ১ বার অ্যাড দেখুন";
-            currentStep = 3;
-        } else if (currentStep === 3) {
-            alert("সব ধাপ সম্পন্ন! এখন ডাউনলোড করুন।");
-            window.location.href = driveLink;
+            stepCount = 2;
+        } else if (stepCount === 2) {
+            document.getElementById('step-text').innerText = "ধাপ ৩: আপনার আর ১ বার অ্যাড দেখতে হবে";
+            stepCount = 3;
+        } else {
+            alert("সব ধাপ শেষ! ডাউনলোড শুরু হচ্ছে...");
+            const a = document.createElement('a');
+            a.href = selectedFileUrl;
+            a.download = document.getElementById('fileInput').files[0].name;
+            a.click();
         }
     }
 </script>
