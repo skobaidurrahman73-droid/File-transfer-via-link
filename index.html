@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin: ওবায়দুর রহমান | ফাইল শেয়ারিং</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%); color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 30px; backdrop-filter: blur(15px); box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center; border: 1px solid rgba(255,255,255,0.1); width: 85%; max-width: 400px; }
+        .admin-img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid #00f2fe; margin-bottom: 15px; object-fit: cover; box-shadow: 0 0 15px #00f2fe; }
+        .admin-name { color: #00f2fe; font-weight: bold; margin-bottom: 25px; display: block; font-size: 18px; }
+        h1 { font-size: 22px; margin-bottom: 20px; }
+        .upload-area { border: 2px dashed #00f2fe; padding: 20px; border-radius: 20px; margin-bottom: 20px; cursor: pointer; display: block; background: rgba(0, 242, 254, 0.05); transition: 0.3s; }
+        .upload-area:hover { background: rgba(0, 242, 254, 0.15); }
+        .btn { background: linear-gradient(to right, #00c853, #b2ff59); color: #000; border: none; padding: 15px; border-radius: 50px; font-size: 18px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.4s; box-shadow: 0 5px 15px rgba(0,200,83,0.3); }
+        .btn:hover { transform: scale(1.02); }
+        #link-display { margin-top: 20px; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 10px; display: none; word-break: break-all; color: #ffd700; border: 1px solid #ffd700; }
+        input[type="file"] { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img src="IMG_20251230_153830.jpg" alt="Admin" class="admin-img">
+    <span class="admin-name">👤 Admin: ওবায়দুর রহমান 😎</span>
+    
+    <h1>ফাইল শেয়ারিং সাইট 🚀</h1>
+    
+    <label for="file-upload" class="upload-area">
+        <p id="file-name">📁 ফাইল আপলোড করুন</p>
+        <input type="file" id="file-upload" onchange="updateName()">
+    </label>
+
+    <button class="btn" onclick="generateLink()">🔗 লিঙ্ক জেনারেট করুন ✨</button>
+    
+    <div id="link-display"></div>
+    <div id="status" style="margin-top: 15px; font-size: 14px; color: #ffd700;"></div>
+</div>
+
+<script>
+    function updateName() {
+        const input = document.getElementById('file-upload');
+        if(input.files.length > 0) {
+            document.getElementById('file-name').innerText = "✅ সিলেক্ট হয়েছে: " + input.files[0].name;
+        }
+    }
+
+    function generateLink() {
+        const fileInput = document.getElementById('file-upload');
+        const display = document.getElementById('link-display');
+        const status = document.getElementById('status');
+        
+        if (fileInput.files.length > 0) {
+            status.innerText = "লিঙ্ক তৈরির কাজ চলছে... ⏳";
+            setTimeout(() => {
+                const fileName = fileInput.files[0].name;
+                const fakeLink = window.location.href + "?file=" + encodeURIComponent(fileName);
+                display.style.display = "block";
+                display.innerHTML = "<strong>ডাউনলোড লিঙ্ক:</strong><br>" + fakeLink;
+                status.innerText = "লিঙ্ক সফলভাবে জেনারেট হয়েছে! ✅";
+                
+                // অটোমেটিক ডাউনলোড সিস্টেম
+                const url = URL.createObjectURL(fileInput.files[0]);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }, 2000);
+        } else {
+            alert("অনুগ্রহ করে আগে একটি ফাইল সিলেক্ট করুন! ❌");
+        }
+    }
+</script>
+
+</body>
+</html>
