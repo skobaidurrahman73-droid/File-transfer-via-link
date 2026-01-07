@@ -4,16 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin: ওবায়দুর রহমান | আনলিমিটেড ট্রান্সফার</title>
+    <title>Admin: ওবায়দুর রহমান | ফাইল ট্রান্সফার</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #0f0c29; color: white; text-align: center; margin: 0; padding: 20px; }
         .card { background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 25px; backdrop-filter: blur(15px); border: 1px solid #00f2fe; max-width: 450px; margin: auto; }
-        .profile-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid #00f2fe; box-shadow: 0 0 20px #00f2fe; margin-bottom: 10px; }
+        .profile-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid #00f2fe; box-shadow: 0 0 20px #00f2fe; margin-bottom: 10px; object-fit: cover; }
         .welcome-msg { color: #ffd700; font-size: 14px; margin-bottom: 10px; }
         h2 { font-size: 20px; color: #00f2fe; margin-bottom: 5px; }
-        .upload-box { border: 2px dashed #00f2fe; padding: 20px; border-radius: 15px; margin: 20px 0; cursor: pointer; background: rgba(0, 242, 254, 0.05); transition: 0.3s; }
+        .upload-box { border: 2px dashed #00f2fe; padding: 20px; border-radius: 15px; margin: 20px 0; cursor: pointer; background: rgba(0, 242, 254, 0.05); }
         .btn { background: linear-gradient(90deg, #00c853, #b2ff59); color: black; border: none; padding: 15px; border-radius: 50px; font-weight: bold; width: 100%; cursor: pointer; font-size: 16px; margin-top: 10px; }
         #copy-section, #download-section { display: none; margin-top: 20px; padding: 15px; background: #1a1a2e; border-radius: 10px; border: 1px solid #ffd700; }
+        .ad-space { margin-top: 20px; color: #888; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -40,22 +41,29 @@
         <p>আপনার বন্ধু আপনাকে একটি ফাইল পাঠিয়েছে 📁</p>
         <button class="btn" onclick="startDownload()">⬇️ ডাউনলোড করুন</button>
     </div>
+
+    <div class="ad-space">
+        <p>বিজ্ঞাপন এখানে দেখাবে (Adsterra Code)</p>
+    </div>
 </div>
 
 <script>
-    // বন্ধুর জন্য ডাউনলোড মোড চেক
+    let uploadedFile = null;
+
     if(window.location.search.includes('file=')) {
         document.getElementById('main-ui').style.display = 'none';
         document.getElementById('download-section').style.display = 'block';
-        document.getElementById('welcomeText').innerText = "✨ ওবায়দুরের ফাইল শেয়ারিং সার্ভিসে আপনাকে স্বাগতম ✨";
+        document.getElementById('welcomeText').innerText = "✨ ওবায়দুরের ফাইল শেয়ারিং সার্ভিসে স্বাগতম ✨";
     }
 
     function show() { 
-        document.getElementById('fn').innerText = "✅ ফাইল রেডি: " + document.getElementById('f').files[0].name; 
+        const fileInput = document.getElementById('f');
+        uploadedFile = fileInput.files[0];
+        document.getElementById('fn').innerText = "✅ ফাইল রেডি: " + uploadedFile.name; 
     }
 
     function genLink() {
-        if(document.getElementById('f').files.length == 0) return alert("আগে ফাইল দিন!");
+        if(!uploadedFile) return alert("আগে ফাইল দিন!");
         document.getElementById('genBtn').innerText = "প্রসেসিং হচ্ছে... ⏳";
         setTimeout(() => {
             document.getElementById('main-ui').style.display = 'none';
@@ -64,18 +72,26 @@
     }
 
     function copyLink() {
-        const link = window.location.origin + window.location.pathname + "?file=download";
+        const link = window.location.href + "?file=active";
         navigator.clipboard.writeText(link).then(() => {
-            alert("লিঙ্ক কপি হয়েছে! আপনার বন্ধুকে পাঠান।");
-            window.location.href = window.location.origin + window.location.pathname;
+            alert("লিঙ্ক কপি হয়েছে! বন্ধুকে পাঠান।");
+            location.reload(); 
         });
     }
 
     function startDownload() {
         alert("ডাউনলোড শুরু হচ্ছে... 🚀");
+        // আসল ডাউনলোড করার জন্য একটি ডামি ফাইল তৈরি
+        const blob = new Blob(["ফাইল শেয়ারিং সাকসেস"], { type: "text/plain" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Shared_File.txt";
+        a.click();
+        
         setTimeout(() => {
             window.location.href = window.location.origin + window.location.pathname;
-        }, 2000);
+        }, 3000);
     }
 </script>
 
