@@ -14,7 +14,6 @@
         .upload-box { border: 2px dashed #00f2fe; padding: 20px; border-radius: 15px; margin: 20px 0; cursor: pointer; background: rgba(0, 242, 254, 0.05); }
         .btn { background: linear-gradient(90deg, #00c853, #b2ff59); color: black; border: none; padding: 15px; border-radius: 50px; font-weight: bold; width: 100%; cursor: pointer; font-size: 16px; margin-top: 10px; }
         #copy-section, #download-section { display: none; margin-top: 20px; padding: 15px; background: #1a1a2e; border-radius: 10px; border: 1px solid #ffd700; }
-        .ad-space { margin-top: 20px; color: #888; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -27,7 +26,7 @@
     <div id="main-ui">
         <div class="upload-box" onclick="document.getElementById('f').click()">
             <p id="fn">📁 আপলোড করুন</p>
-            <input type="file" id="f" style="display:none" onchange="show()">
+            <input type="file" id="f" style="display:none" onchange="saveFile()">
         </div>
         <button class="btn" id="genBtn" onclick="genLink()">🔗 লিঙ্ক জেনারেট করুন ✨</button>
     </div>
@@ -41,29 +40,29 @@
         <p>আপনার বন্ধু আপনাকে একটি ফাইল পাঠিয়েছে 📁</p>
         <button class="btn" onclick="startDownload()">⬇️ ডাউনলোড করুন</button>
     </div>
-
-    <div class="ad-space">
-        <p>বিজ্ঞাপন এখানে দেখাবে (Adsterra Code)</p>
-    </div>
 </div>
 
 <script>
-    let uploadedFile = null;
+    function saveFile() {
+        const file = document.getElementById('f').files[0];
+        if (file) {
+            document.getElementById('fn').innerText = "✅ সিলেক্ট হয়েছে: " + file.name;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                localStorage.setItem('tempFile', e.target.result);
+                localStorage.setItem('tempFileName', file.name);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
 
     if(window.location.search.includes('file=')) {
         document.getElementById('main-ui').style.display = 'none';
         document.getElementById('download-section').style.display = 'block';
-        document.getElementById('welcomeText').innerText = "✨ ওবায়দুরের ফাইল শেয়ারিং সার্ভিসে স্বাগতম ✨";
-    }
-
-    function show() { 
-        const fileInput = document.getElementById('f');
-        uploadedFile = fileInput.files[0];
-        document.getElementById('fn').innerText = "✅ ফাইল রেডি: " + uploadedFile.name; 
     }
 
     function genLink() {
-        if(!uploadedFile) return alert("আগে ফাইল দিন!");
+        if(!localStorage.getItem('tempFile')) return alert("আগে ফাইল আপলোড করুন!");
         document.getElementById('genBtn').innerText = "প্রসেসিং হচ্ছে... ⏳";
         setTimeout(() => {
             document.getElementById('main-ui').style.display = 'none';
@@ -72,26 +71,29 @@
     }
 
     function copyLink() {
-        const link = window.location.href + "?file=active";
+        const link = window.location.href.split('?')[0] + "?file=active";
         navigator.clipboard.writeText(link).then(() => {
             alert("লিঙ্ক কপি হয়েছে! বন্ধুকে পাঠান।");
-            location.reload(); 
+            window.location.href = window.location.href.split('?')[0];
         });
     }
 
     function startDownload() {
-        alert("ডাউনলোড শুরু হচ্ছে... 🚀");
-        // আসল ডাউনলোড করার জন্য একটি ডামি ফাইল তৈরি
-        const blob = new Blob(["ফাইল শেয়ারিং সাকসেস"], { type: "text/plain" });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "Shared_File.txt";
-        a.click();
-        
-        setTimeout(() => {
-            window.location.href = window.location.origin + window.location.pathname;
-        }, 3000);
+        const fileData = localStorage.getItem('tempFile');
+        const fileName = localStorage.getItem('tempFileName');
+        if (fileData) {
+            const a = document.createElement("a");
+            a.href = fileData;
+            a.download = fileName;
+            a.click();
+            alert("ডাউনলোড শুরু হয়েছে! 🚀");
+            setTimeout(() => {
+                localStorage.clear();
+                window.location.href = window.location.href.split('?')[0];
+            }, 2000);
+        } else {
+            alert("ফাইলটি খুঁজে পাওয়া যায়নি! ❌");
+        }
     }
 </script>
 
