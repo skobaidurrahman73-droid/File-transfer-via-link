@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -7,49 +8,74 @@
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #0f0c29; color: white; text-align: center; margin: 0; padding: 20px; }
         .card { background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 25px; backdrop-filter: blur(15px); border: 1px solid #00f2fe; max-width: 450px; margin: auto; }
-        .profile-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid #00f2fe; box-shadow: 0 0 20px #00f2fe; }
-        .welcome-msg { color: #ffd700; font-size: 14px; margin-top: 10px; }
-        h2 { font-size: 20px; color: #00f2fe; }
+        .profile-img { width: 110px; height: 110px; border-radius: 50%; border: 4px solid #00f2fe; box-shadow: 0 0 20px #00f2fe; margin-bottom: 10px; }
+        .welcome-msg { color: #ffd700; font-size: 14px; margin-bottom: 10px; }
+        h2 { font-size: 20px; color: #00f2fe; margin-bottom: 5px; }
         .upload-box { border: 2px dashed #00f2fe; padding: 20px; border-radius: 15px; margin: 20px 0; cursor: pointer; background: rgba(0, 242, 254, 0.05); transition: 0.3s; }
-        .upload-box:hover { background: rgba(0, 242, 254, 0.2); }
         .btn { background: linear-gradient(90deg, #00c853, #b2ff59); color: black; border: none; padding: 15px; border-radius: 50px; font-weight: bold; width: 100%; cursor: pointer; font-size: 16px; margin-top: 10px; }
-        #copy-section { display: none; margin-top: 20px; padding: 15px; background: #1a1a2e; border-radius: 10px; border: 1px solid #ffd700; }
+        #copy-section, #download-section { display: none; margin-top: 20px; padding: 15px; background: #1a1a2e; border-radius: 10px; border: 1px solid #ffd700; }
     </style>
 </head>
 <body>
 
 <div class="card">
     <img src="IMG_20251230_153830.jpg" class="profile-img">
-    <div class="welcome-msg">✨ আসসালামু আলাইকুম! ওবায়দুরের পক্ষ থেকে স্বাগতম ✨</div>
+    <div class="welcome-msg" id="welcomeText">✨ আসসালামু আলাইকুম! ওবায়দুরের পক্ষ থেকে স্বাগতম ✨</div>
     <h2>👤 Admin: ওবায়দুর রহমান 😎</h2>
-    <p>এখানে কোনো লিমিট ছাড়াই বড় ফাইল শেয়ার করুন 🚀</p>
 
-    <div class="upload-box" onclick="document.getElementById('f').click()">
-        <p id="fn">📁 বড় ফাইল সিলেক্ট করুন (১০ জিবি+)</p>
-        <input type="file" id="f" style="display:none" onchange="show()">
+    <div id="main-ui">
+        <div class="upload-box" onclick="document.getElementById('f').click()">
+            <p id="fn">📁 আপলোড করুন</p>
+            <input type="file" id="f" style="display:none" onchange="show()">
+        </div>
+        <button class="btn" id="genBtn" onclick="genLink()">🔗 লিঙ্ক জেনারেট করুন ✨</button>
     </div>
-
-    <button class="btn" id="genBtn" onclick="genLink()">🔗 লিঙ্ক জেনারেট করুন ✨</button>
 
     <div id="copy-section">
         <p style="color:#ffd700">লিঙ্ক তৈরি হয়েছে! ✅</p>
-        <button class="btn" style="background:#ffd700" onclick="copy()">📋 লিঙ্ক কপি করুন</button>
+        <button class="btn" style="background:#ffd700" onclick="copyLink()">📋 লিঙ্ক কপি করুন</button>
+    </div>
+
+    <div id="download-section">
+        <p>আপনার বন্ধু আপনাকে একটি ফাইল পাঠিয়েছে 📁</p>
+        <button class="btn" onclick="startDownload()">⬇️ ডাউনলোড করুন</button>
     </div>
 </div>
 
 <script>
-    function show() { document.getElementById('fn').innerText = "✅ ফাইল রেডি!"; }
+    // বন্ধুর জন্য ডাউনলোড মোড চেক
+    if(window.location.search.includes('file=')) {
+        document.getElementById('main-ui').style.display = 'none';
+        document.getElementById('download-section').style.display = 'block';
+        document.getElementById('welcomeText').innerText = "✨ ওবায়দুরের ফাইল শেয়ারিং সার্ভিসে আপনাকে স্বাগতম ✨";
+    }
+
+    function show() { 
+        document.getElementById('fn').innerText = "✅ ফাইল রেডি: " + document.getElementById('f').files[0].name; 
+    }
+
     function genLink() {
         if(document.getElementById('f').files.length == 0) return alert("আগে ফাইল দিন!");
         document.getElementById('genBtn').innerText = "প্রসেসিং হচ্ছে... ⏳";
         setTimeout(() => {
-            document.getElementById('genBtn').style.display = 'none';
+            document.getElementById('main-ui').style.display = 'none';
             document.getElementById('copy-section').style.display = 'block';
-        }, 2000);
+        }, 1500);
     }
-    function copy() {
-        alert("লিঙ্ক কপি হয়েছে! এখন আপনার বন্ধুকে পাঠান।");
-        location.reload(); // কাজ শেষ হলে আবার শুরু থেকে শুরু হবে
+
+    function copyLink() {
+        const link = window.location.origin + window.location.pathname + "?file=download";
+        navigator.clipboard.writeText(link).then(() => {
+            alert("লিঙ্ক কপি হয়েছে! আপনার বন্ধুকে পাঠান।");
+            window.location.href = window.location.origin + window.location.pathname;
+        });
+    }
+
+    function startDownload() {
+        alert("ডাউনলোড শুরু হচ্ছে... 🚀");
+        setTimeout(() => {
+            window.location.href = window.location.origin + window.location.pathname;
+        }, 2000);
     }
 </script>
 
