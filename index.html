@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ওবায়দুর রহমান | ফাইল শেয়ার</title>
+    <title>Admin: ওবায়দুর রহমান</title>
     <style>
         body { font-family: sans-serif; background: #0f0c29; color: white; text-align: center; padding: 20px; }
         .card { background: rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 20px; border: 1px solid #00f2fe; max-width: 400px; margin: auto; }
         .btn { background: #00c853; color: black; border: none; padding: 15px; border-radius: 50px; font-weight: bold; width: 100%; cursor: pointer; margin-top: 15px; text-decoration: none; display: block; }
-        #downloadArea { display: none; margin-top: 20px; padding: 10px; border: 1px dashed #ffd700; }
+        #step-box { display: none; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -16,39 +16,44 @@
 <div class="card">
     <img src="IMG_20251230_153830.jpg" style="width:100px; border-radius:50%; border:2px solid #00f2fe;">
     <h2>ওবায়দুর রহমান</h2>
-    
-    <input type="file" id="fileInput" style="display:none" onchange="processFile()">
-    <button class="btn" onclick="document.getElementById('fileInput').click()">📁 ফাইল আপলোড করুন</button>
 
-    <div id="downloadArea">
-        <p id="info"></p>
-        <a id="dlBtn" href="#" class="btn" style="background:#ffd700;" onclick="startIncome()">⬇️ ডাউনলোড করুন</a>
+    <div id="upload-part">
+        <button class="btn" onclick="startUpload()">📁 ফাইল আপলোড করুন</button>
+    </div>
+
+    <div id="step-box">
+        <p id="step-text">ধাপ ১: ফাইলটি পেতে বিজ্ঞাপন দেখুন</p>
+        <button class="btn" id="action-btn" onclick="handleSteps()">বিজ্ঞাপন দেখে এগিয়ে যান</button>
     </div>
 </div>
 
 <script>
     const adLink = "https://www.effectivegatecpm.com/w6arakqmr0?key=cfe5b3bf60645ca848c57f56fdc4be23";
-    let fileData = "";
+    const driveLink = "https://drive.google.com/drive/folders/1YGiGnVKkgvrDLBeesQfMoqdAKIU6J1w5";
+    let currentStep = 1;
 
-    function processFile() {
-        const file = document.getElementById('fileInput').files[0];
-        if (file) {
-            fileData = URL.createObjectURL(file);
-            document.getElementById('info').innerText = "ফাইল: " + file.name;
-            document.getElementById('downloadArea').style.display = 'block';
-            alert("ফাইল তৈরি! ডাউনলোড বাটনে চাপ দিন।");
-        }
+    // সাকিবের জন্য
+    function startUpload() {
+        window.open(adLink, "_blank");
+        alert("লিঙ্কটি কপি হয়েছে! আপনার বন্ধুকে পাঠান।");
+        document.getElementById('upload-part').style.display = 'none';
+        document.getElementById('step-box').style.display = 'block';
     }
 
-    function startIncome() {
-        // বিজ্ঞাপন ওপেন হবে (ইনকাম হবে)
+    // বন্ধুর জন্য ৩ ধাপ
+    function handleSteps() {
         window.open(adLink, "_blank");
         
-        // ফাইলটি ডাউনলোড হবে
-        const link = document.createElement('a');
-        link.href = fileData;
-        link.download = document.getElementById('fileInput').files[0].name;
-        link.click();
+        if (currentStep === 1) {
+            document.getElementById('step-text').innerText = "ধাপ ২: আপনার আর ২ বার অ্যাড দেখতে হবে";
+            currentStep = 2;
+        } else if (currentStep === 2) {
+            document.getElementById('step-text').innerText = "ধাপ ৩: শেষ ধাপ! আর ১ বার অ্যাড দেখুন";
+            currentStep = 3;
+        } else if (currentStep === 3) {
+            alert("সব ধাপ সম্পন্ন! এখন ডাউনলোড করুন।");
+            window.location.href = driveLink;
+        }
     }
 </script>
 
