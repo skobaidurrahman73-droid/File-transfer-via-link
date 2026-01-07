@@ -1,100 +1,129 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERMINAL | BY OBADUR</title>
+    <title>CYBERNETIC FILE-GRID | OBADUR</title>
     <style>
-        :root { --neon: #00ff41; --bg: #050505; --dark-red: #ff003c; }
-        body { background: var(--bg); color: var(--neon); font-family: 'Courier New', monospace; margin: 0; padding: 20px; overflow-x: hidden; }
-        .container { max-width: 600px; margin: auto; border: 1px solid var(--neon); padding: 30px; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 255, 65, 0.2); background: rgba(0,0,0,0.9); }
-        .profile { width: 120px; height: 120px; border-radius: 50%; border: 2px solid var(--neon); filter: grayscale(100%) contrast(1.2); box-shadow: 0 0 15px var(--neon); margin-bottom: 20px; }
-        input { background: #000; border: 1px solid var(--neon); color: var(--neon); padding: 12px; width: 100%; border-radius: 5px; margin: 15px 0; box-sizing: border-box; outline: none; }
-        .btn { background: var(--neon); color: #000; border: none; padding: 15px; width: 100%; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; }
-        .btn:hover { background: #000; color: var(--neon); border: 1px solid var(--neon); box-shadow: 0 0 20px var(--neon); }
-        .matrix-text { font-size: 12px; opacity: 0.5; margin-bottom: 20px; }
-        #link-res, #target-ui { display: none; margin-top: 20px; }
-        .step-box { border: 1px solid var(--dark-red); padding: 15px; text-align: center; }
-        .progress { height: 5px; background: #222; margin: 10px 0; }
-        .fill { height: 100%; background: var(--neon); transition: 0.4s; }
+        :root { --neon: #39ff14; --cyan: #00f2fe; --red: #ff003c; --bg: #0d0d0d; }
+        body { background: var(--bg); color: #fff; font-family: 'Segoe UI', monospace; margin: 0; padding: 20px; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow-x: hidden; }
+        
+        /* সাইবার কন্টেইনার */
+        .container { width: 100%; max-width: 500px; background: #1a1a1a; border-radius: 15px; border-left: 5px solid var(--cyan); box-shadow: 0 0 30px rgba(0,0,0,0.8); position: relative; padding: 25px; border-top-right-radius: 40px; }
+        
+        /* প্রোফাইল সেকশন */
+        .header { display: flex; align-items: center; gap: 20px; border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 20px; }
+        .profile-img { width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--neon); padding: 3px; box-shadow: 0 0 15px var(--neon); }
+        .title-group h2 { color: var(--cyan); margin: 0; font-size: 22px; letter-spacing: 1px; }
+        .title-group p { color: var(--neon); margin: 5px 0 0; font-size: 12px; font-family: monospace; }
+
+        /* ইনপুট ও বাটন */
+        .box { background: #222; border-radius: 10px; padding: 15px; margin-bottom: 15px; border: 1px solid #333; }
+        label { display: block; font-size: 11px; color: #888; margin-bottom: 8px; text-transform: uppercase; }
+        input { width: 100%; background: #000; border: 1px solid #444; color: var(--neon); padding: 12px; border-radius: 5px; box-sizing: border-box; outline: none; font-size: 13px; }
+        .btn { width: 100%; padding: 12px; border-radius: 5px; border: none; font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.3s; margin-top: 10px; }
+        .btn-gen { background: var(--neon); color: #000; }
+        .btn-gen:hover { box-shadow: 0 0 20px var(--neon); }
+
+        /* প্রগ্রেস বার */
+        .progress-area { margin-top: 20px; }
+        .progress-bg { height: 10px; background: #000; border-radius: 10px; overflow: hidden; border: 1px solid #333; }
+        .progress-fill { width: 10%; height: 100%; background: linear-gradient(to right, #11ffbd, var(--neon)); box-shadow: 0 0 10px var(--neon); transition: 0.5s; }
+
+        /* এনিমেশন ও মেসেজ */
+        .access-msg { color: var(--red); font-weight: bold; font-size: 14px; margin-bottom: 5px; display: flex; align-items: center; gap: 10px; }
+        .blink { animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+        
+        #res-ui, #target-ui { display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <img src="IMG_20251230_153830.jpg" class="profile" alt="Admin Obadur">
-    <div class="matrix-text">SYSTEM STATUS: ENCRYPTED // ADMIN: OBADUR</div>
+    <div class="header">
+        <img src="IMG_20251230_153830.jpg" class="profile-img">
+        <div class="title-group">
+            <h2>CYBERNETIC FILE-GRID</h2>
+            <p>IMG_20251230_153830.jpg // ADMIN ACCESS</p>
+        </div>
+    </div>
 
     <div id="gen-ui">
-        <h2>ROOT ACCESS: LINK BYPASS</h2>
-        <p>গুগল ড্রাইভ লিঙ্কটি এখানে পেস্ট করুন:</p>
-        <input type="text" id="driveURL" placeholder="https://drive.google.com/...">
-        <button class="btn" onclick="generateSecureLink()">লিঙ্ক জেনারেট করুন</button>
-
-        <div id="link-res">
-            <p style="color: yellow;">লিঙ্ক এনক্রিপ্ট হয়েছে:</p>
+        <div class="box">
+            <label>SOURCE URL</label>
+            <input type="text" id="driveURL" placeholder="https://drive.google.com/...">
+            <button class="btn btn-gen" onclick="generateLink()">GENERATE SECURE LINK</button>
+        </div>
+        
+        <div id="res-ui" class="box" style="border-color: var(--neon);">
+            <label>ENCRYPTED LINK</label>
             <input type="text" id="finalURL" readonly>
-            <button class="btn" style="background: #fff;" onclick="copyLink()">📋 লিঙ্ক কপি করুন</button>
+            <button class="btn" style="background: #fff;" onclick="copyLink()">📋 COPY LINK</button>
         </div>
     </div>
 
     <div id="target-ui">
-        <h2 style="color: var(--dark-red);">ACCESS DENIED!</h2>
-        <p id="status-msg">ফাইলটি ডাউনলোড করতে ১০টি সিকিউরিটি গেট আনলক করুন।</p>
-        <div class="progress"><div class="fill" id="p-bar" style="width: 10%;"></div></div>
-        <div class="step-box">
-            <span id="step-count">ধাপ: ১ / ১০</span>
-            <button class="btn" style="margin-top:15px; background:var(--dark-red); color:#fff;" onclick="bypassStep()">গেট আনলক করুন ➔</button>
+        <div class="access-msg">
+            <span class="blink">●</span> ACCESS PROTOCOL: REQUIRED
+        </div>
+        <p style="font-size: 11px; color: #888;">INITIATING DATA-STREAM UNLOCK // STEPS REMAINING: <span id="rem-step">10</span></p>
+        
+        <div class="progress-area">
+            <div style="display: flex; justify-content: space-between; font-size: 10px; margin-bottom: 5px;">
+                <span>PROGRESS</span>
+                <span id="p-percent">10%</span>
+            </div>
+            <div class="progress-bg"><div class="progress-fill" id="p-fill"></div></div>
+        </div>
+
+        <div class="box" style="margin-top: 20px;">
+            <label id="step-label">STEP: 1 / 10</label>
+            <button class="btn btn-gen" onclick="unlockGate()">UNLOCK GATE ➔</button>
         </div>
     </div>
 </div>
 
 <script>
-    const AD_LINK = "https://www.effectivegatecpm.com/w6arakqmr0?key=cfe5b3bf60645ca848c57f56fdc4be23";
-    let currentStep = 1;
+    const AD_URL = "https://www.effectivegatecpm.com/w6arakqmr0?key=cfe5b3bf60645ca848c57f56fdc4be23";
+    let step = 1;
 
-    // ১. আপনার জন্য অ্যাড-ফ্রি জেনারেশন
-    function generateSecureLink() {
-        const input = document.getElementById('driveURL').value;
-        if(input.includes("drive.google.com")) {
+    function generateLink() {
+        const val = document.getElementById('driveURL').value;
+        if(val.includes("drive.google.com")) {
             const base = window.location.href.split('?')[0];
-            const encoded = btoa(input);
-            document.getElementById('finalURL').value = base + "?access=" + encoded;
-            document.getElementById('link-res').style.display = 'block';
-        } else {
-            alert("সঠিক ড্রাইভ লিঙ্ক দিন!");
-        }
+            document.getElementById('finalURL').value = base + "?secure=" + btoa(val);
+            document.getElementById('res-ui').style.display = 'block';
+        } else { alert("Error: Invalid Source"); }
     }
 
     function copyLink() {
-        const copyText = document.getElementById('finalURL');
-        copyText.select();
-        navigator.clipboard.writeText(copyText.value);
-        alert("লিঙ্ক কপি হয়েছে! এটি আপনার বন্ধুকে পাঠান।");
+        const input = document.getElementById('finalURL');
+        input.select();
+        navigator.clipboard.writeText(input.value);
+        alert("Encrypted Link Copied!");
     }
 
-    // ২. বন্ধুর জন্য ১০-ধাপের অ্যাড সিস্টেম
     window.onload = function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        if(urlParams.has('access')) {
+        const params = new URLSearchParams(window.location.search);
+        if(params.has('secure')) {
             document.getElementById('gen-ui').style.display = 'none';
             document.getElementById('target-ui').style.display = 'block';
         }
     }
 
-    function bypassStep() {
-        window.open(AD_LINK, "_blank");
-        
-        if(currentStep < 10) {
-            currentStep++;
-            document.getElementById('step-count').innerText = "ধাপ: " + currentStep + " / ১০";
-            document.getElementById('p-bar').style.width = (currentStep * 10) + "%";
-            document.getElementById('status-msg').innerText = "গেট " + (currentStep-1) + " সফলভাবে বাইপাস হয়েছে।";
+    function unlockGate() {
+        window.open(AD_URL, "_blank");
+        if(step < 10) {
+            step++;
+            document.getElementById('rem-step').innerText = (11 - step);
+            document.getElementById('step-label').innerText = "STEP: " + step + " / 10";
+            let percent = step * 10;
+            document.getElementById('p-percent').innerText = percent + "%";
+            document.getElementById('p-fill').style.width = percent + "%";
         } else {
-            const urlParams = new URLSearchParams(window.location.search);
-            const rawLink = atob(urlParams.get('access'));
-            alert("সব গেট আনলক হয়েছে! ড্রাইভ ফাইল ওপেন হচ্ছে...");
-            window.location.href = rawLink;
+            const params = new URLSearchParams(window.location.search);
+            window.location.href = atob(params.get('secure'));
         }
     }
 </script>
