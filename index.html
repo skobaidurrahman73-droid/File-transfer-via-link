@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBER-GRID LIVE | ANONYMOUS</title>
+    <title>CYBER-GRID LIVE | SYSTEM</title>
     <style>
         :root { --neon: #39ff14; --cyan: #00f2fe; --red: #ff003c; --bg: #050505; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg); font-family: 'Courier New', monospace; overflow: hidden; color: #fff; }
         canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.15; }
         .wrapper { display: flex; align-items: center; justify-content: center; height: 100vh; padding: 20px; box-sizing: border-box; }
         .container { width: 100%; max-width: 500px; background: rgba(20, 20, 20, 0.95); border: 1px solid var(--cyan); border-radius: 5px; position: relative; padding: 25px; box-shadow: 0 0 30px rgba(0, 242, 254, 0.2); }
-        .container::before { content: "LIVE_SYSTEM_ACTIVE"; position: absolute; top: -10px; right: 20px; background: var(--cyan); color: #000; font-size: 10px; padding: 2px 10px; font-weight: bold; }
+        .container::before { content: "SYSTEM_LIVE_ENCRYPTED"; position: absolute; top: -10px; right: 20px; background: var(--cyan); color: #000; font-size: 10px; padding: 2px 10px; font-weight: bold; }
         .header { display: flex; align-items: center; gap: 20px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px dashed #444; }
         .profile-img { width: 85px; height: 85px; border-radius: 50%; border: 2px solid var(--neon); box-shadow: 0 0 15px var(--neon); object-fit: cover; }
         .header h2 { color: var(--cyan); margin: 0; font-size: 20px; text-shadow: 0 0 10px var(--cyan); }
@@ -38,13 +38,13 @@
             <img src="cyber-hacker-anonymous-logo-vector-50369664.jpg" class="profile-img">
             <div>
                 <h2>CYBERNETIC GRID</h2>
-                <p>STATUS: ANONYMOUS // ENCRYPTION ACTIVE</p>
+                <p>ACCESS: ANONYMOUS // ENCRYPTION: AES-256</p>
             </div>
         </div>
 
         <div id="gen-ui">
             <div class="box">
-                <label>INJECT TARGET URL</label>
+                <label>TARGET URL INJECTION</label>
                 <input type="text" id="urlInput" placeholder="Enter link here...">
                 <button class="btn btn-neon" onclick="generate()">GENERATE SECURE GRID</button>
             </div>
@@ -56,15 +56,15 @@
         </div>
 
         <div id="target-ui">
-            <span class="status-tag">>> WARNING: ACCESS PROTOCOL REQUIRED</span>
+            <span class="status-tag">>> SECURITY PROTOCOL: ACTIVE</span>
             <div class="box">
-                <label>STREAM UNLOCK PROGRESS</label>
+                <label>DATA STREAM UNLOCK PROGRESS</label>
                 <div class="progress-bar"><div class="fill" id="fill"></div></div>
                 <div style="display:flex; justify-content:space-between; font-size:10px;">
                     <span id="step-info">STEP: 1 / 10</span>
                     <span id="percent">10%</span>
                 </div>
-                <button class="btn btn-neon" style="margin-top:20px;" onclick="unlock()">UNLOCK DATA GATE ➔</button>
+                <button class="btn btn-neon" style="margin-top:20px;" onclick="unlock()">UNLOCK GATE ➔</button>
             </div>
         </div>
     </div>
@@ -110,7 +110,7 @@
         const el = document.getElementById('output');
         el.select();
         navigator.clipboard.writeText(el.value);
-        alert("Encrypted Link Copied.");
+        alert("Link Copied.");
     }
 
     window.onload = function() {
