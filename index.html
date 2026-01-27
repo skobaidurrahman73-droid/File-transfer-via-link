@@ -8,37 +8,21 @@
         :root { --neon: #39ff14; --cyan: #00f2fe; --red: #ff003c; --bg: #050505; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg); font-family: 'Courier New', monospace; overflow: hidden; color: #fff; }
         canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.2; }
-        
         .wrapper { display: flex; align-items: center; justify-content: center; height: 100vh; padding: 20px; box-sizing: border-box; }
         .container { width: 100%; max-width: 480px; background: rgba(10, 10, 10, 0.9); border: 1px solid var(--neon); border-radius: 2px; position: relative; padding: 25px; box-shadow: 0 0 20px rgba(57, 255, 20, 0.1); }
-        
-        /* Glitch Animation */
         .glitch { font-size: 22px; font-weight: bold; color: var(--cyan); position: relative; text-shadow: 2px 2px var(--red); animation: glitch 1s infinite; }
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-            100% { transform: translate(0); }
-        }
-
+        @keyframes glitch { 0% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 40% { transform: translate(-2px, -2px); } 60% { transform: translate(2px, 2px); } 80% { transform: translate(2px, -2px); } 100% { transform: translate(0); } }
         .header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; border-bottom: 1px solid #222; padding-bottom: 15px; }
         .profile-img { width: 70px; height: 70px; border: 2px solid var(--neon); padding: 2px; filter: grayscale(100%) contrast(120%); }
-        
         .box { background: #000; border: 1px solid #222; padding: 15px; margin-bottom: 15px; transition: 0.3s; }
         .box:hover { border-color: var(--cyan); }
-        
         label { font-size: 9px; color: var(--neon); display: block; margin-bottom: 8px; letter-spacing: 2px; }
         input { width: 100%; background: #000; border: none; border-bottom: 1px solid #444; color: var(--cyan); padding: 10px 0; font-size: 14px; outline: none; box-sizing: border-box; }
         input:focus { border-bottom: 1px solid var(--cyan); }
-
         .btn { width: 100%; padding: 14px; border: 1px solid var(--neon); background: transparent; color: var(--neon); font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.4s; margin-top: 10px; }
         .btn:hover { background: var(--neon); color: #000; box-shadow: 0 0 20px var(--neon); }
-        
         .progress-bar { height: 4px; background: #111; margin: 15px 0; position: relative; border-radius: 10px; }
         .fill { width: 0%; height: 100%; background: var(--cyan); box-shadow: 0 0 10px var(--cyan); transition: 0.5s ease; }
-        
         .status-tag { color: var(--red); font-size: 11px; margin-bottom: 10px; display: block; letter-spacing: 1px; }
         #res-ui, #target-ui { display: none; }
     </style>
@@ -76,7 +60,7 @@
                 <label>DECRYPTING DATA STREAM...</label>
                 <div class="progress-bar"><div class="fill" id="fill"></div></div>
                 <div style="display:flex; justify-content:space-between; font-size:10px; color: var(--cyan);">
-                    <span id="step-info">GATE: 1 / 10</span>
+                    <span id="step-info">GATE: 0 / 2</span>
                     <span id="percent">0%</span>
                 </div>
                 <button class="btn" style="border-color: var(--cyan); color: var(--cyan);" onclick="unlock()">UNLOCK NEXT GATE ➔</button>
@@ -86,10 +70,10 @@
 </div>
 
 <script>
-    const AD = "https://www.effectivegatecpm.com/w6arakqmr0?key=cfe5b3bf60645ca848c57f56fdc4be23";
+    const AD = "https://otieu.com/4/10492846";
+    const TOTAL_STEPS = 2; // ২ বার দেখার নিয়ম
     let currentStep = 0;
 
-    // Matrix Effect
     const canvas = document.getElementById('matrix');
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
@@ -112,7 +96,6 @@
     }
     setInterval(drawMatrix, 50);
 
-    // Random User ID
     document.getElementById('uid').innerText = Math.random().toString(36).substring(7).toUpperCase();
 
     function generate() {
@@ -141,13 +124,14 @@
 
     function unlock() {
         window.open(AD, "_blank");
-        if(currentStep < 10) {
+        if(currentStep < TOTAL_STEPS) {
             currentStep++;
-            document.getElementById('step-info').innerText = "GATE: " + currentStep + " / 10";
-            document.getElementById('percent').innerText = (currentStep * 10) + "%";
-            document.getElementById('fill').style.width = (currentStep * 10) + "%";
+            let progress = (currentStep / TOTAL_STEPS) * 100;
+            document.getElementById('step-info').innerText = "GATE: " + currentStep + " / " + TOTAL_STEPS;
+            document.getElementById('percent').innerText = Math.round(progress) + "%";
+            document.getElementById('fill').style.width = progress + "%";
             
-            if(currentStep === 10) {
+            if(currentStep === TOTAL_STEPS) {
                 const p = new URLSearchParams(window.location.search);
                 setTimeout(() => {
                     window.location.href = atob(p.get('secure'));
