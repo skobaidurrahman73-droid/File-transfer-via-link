@@ -8,26 +8,33 @@
         :root { --neon: #39ff14; --cyan: #00f2fe; --red: #ff003c; --bg: #050505; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--bg); font-family: 'Courier New', monospace; overflow: hidden; color: #fff; }
         canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.2; }
+        .top-bar { position: fixed; top: 0; width: 100%; background: rgba(0,0,0,0.8); border-bottom: 1px solid var(--neon); padding: 10px; text-align: center; z-index: 100; }
+        .gen-nav { background: transparent; border: 1px solid var(--cyan); color: var(--cyan); padding: 5px 15px; cursor: pointer; font-size: 12px; text-transform: uppercase; }
         .wrapper { display: flex; align-items: center; justify-content: center; height: 100vh; padding: 20px; box-sizing: border-box; }
-        .container { width: 100%; max-width: 480px; background: rgba(10, 10, 10, 0.9); border: 1px solid var(--neon); border-radius: 2px; position: relative; padding: 25px; box-shadow: 0 0 20px rgba(57, 255, 20, 0.1); }
-        .glitch { font-size: 26px; font-weight: bold; color: var(--cyan); position: relative; text-shadow: 2px 2px var(--red); animation: glitch 1s infinite; }
+        .container { width: 100%; max-width: 480px; background: rgba(10, 10, 10, 0.9); border: 1px solid var(--neon); border-radius: 2px; position: relative; padding: 25px; }
+        .glitch { font-size: 26px; font-weight: bold; color: var(--cyan); text-shadow: 2px 2px var(--red); animation: glitch 1s infinite; }
         @keyframes glitch { 0% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 40% { transform: translate(-2px, -2px); } 60% { transform: translate(2px, 2px); } 80% { transform: translate(2px, -2px); } 100% { transform: translate(0); } }
         .header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; border-bottom: 1px solid #222; padding-bottom: 15px; }
-        .profile-img { width: 70px; height: 70px; border: 2px solid var(--neon); padding: 2px; filter: grayscale(100%) contrast(120%); }
+        .profile-img { width: 70px; height: 70px; border: 2px solid var(--neon); padding: 2px; }
         .box { background: #000; border: 1px solid #222; padding: 15px; margin-bottom: 15px; }
-        label { font-size: 10px; color: var(--neon); display: block; margin-bottom: 8px; letter-spacing: 2px; font-weight: bold; }
-        input { width: 100%; background: #000; border: none; border-bottom: 1px solid #444; color: var(--cyan); padding: 10px 0; font-size: 14px; outline: none; }
+        label { font-size: 10px; color: var(--neon); display: block; margin-bottom: 8px; letter-spacing: 2px; font-weight: bold; text-transform: uppercase; }
+        input { width: 100%; background: #000; border: none; border-bottom: 1px solid #444; color: var(--cyan); padding: 10px 0; font-size: 14px; outline: none; margin-bottom: 10px; }
         .btn { width: 100%; padding: 16px; border: 1px solid var(--neon); background: transparent; color: var(--neon); font-weight: bold; cursor: pointer; text-transform: uppercase; transition: 0.4s; margin-top: 10px; font-size: 16px; }
-        .btn:hover:not(:disabled) { background: var(--neon); color: #000; box-shadow: 0 0 20px var(--neon); }
-        .btn:disabled { border-color: #444; color: #ff003c; cursor: not-allowed; font-size: 18px; }
+        .btn:hover:not(:disabled) { background: var(--neon); color: #000; }
+        .btn:disabled { border-color: #444; color: #ff003c; cursor: not-allowed; }
         .progress-bar { height: 6px; background: #111; margin: 15px 0; border-radius: 10px; overflow: hidden; }
-        .fill { width: 0%; height: 100%; background: var(--cyan); box-shadow: 0 0 10px var(--cyan); transition: 0.5s ease; }
-        .notice { font-size: 11px; color: #aaa; margin-top: 20px; line-height: 1.5; border-top: 1px solid #222; padding-top: 10px; }
-        #res-ui, #target-ui, #final-step { display: none; }
-        .social-btn { border-color: #ff003c; color: #ff003c; margin-bottom: 10px; }
+        .fill { width: 0%; height: 100%; background: var(--cyan); transition: 0.5s ease; }
+        #res-ui, #target-ui, #social-gate { display: none; }
+        .social-btn { display: none; margin-bottom: 10px; border-color: var(--red); color: var(--red); }
+        .social-btn.active { display: block; }
+        .social-btn.ok { border-color: var(--neon); color: var(--neon); }
     </style>
 </head>
 <body>
+
+<div class="top-bar">
+    <button class="gen-nav" onclick="location.href=location.pathname">Link Generate</button>
+</div>
 
 <canvas id="matrix"></canvas>
 
@@ -43,58 +50,53 @@
 
         <div id="gen-ui">
             <div class="box">
-                <label>INJECT TARGET LINK</label>
+                <label>YouTube Channel Link (Optional)</label>
+                <input type="text" id="ytInput" placeholder="https://youtube.com/@channel">
+                <label>Telegram Channel Link (Optional)</label>
+                <input type="text" id="tgInput" placeholder="https://t.me/channel">
+                <label>Target Content Link (Required)</label>
                 <input type="text" id="urlInput" placeholder="https://example.com">
-                <button class="btn" onclick="generate()">ENCRYPT LINK</button>
+                <button class="btn" onclick="generate()">Encrypt System</button>
             </div>
             <div id="res-ui" class="box" style="border-color: var(--cyan);">
-                <label>ENCRYPTED GRID LINK</label>
+                <label>Encrypted Access Link</label>
                 <input type="text" id="output" readonly style="color:var(--cyan)">
-                <button class="btn" style="border-color: var(--cyan); color: var(--cyan);" onclick="copy()">COPY ACCESS LINK</button>
+                <button class="btn" onclick="copy()">Copy Access Link</button>
             </div>
         </div>
 
         <div id="target-ui">
-            <div class="box" id="unlock-box">
-                <label id="main-label">SYSTEM DECRYPTING...</label>
-                <div class="progress-bar"><div class="fill" id="fill"></div></div>
-                <div style="display:flex; justify-content:space-between; font-size:12px; color: var(--cyan); margin-bottom: 10px;">
-                    <span id="step-info">GATE: 0 / 5</span>
-                    <span id="percent">0%</span>
+            <div id="gate-area">
+                <div class="box">
+                    <label>Bypassing Security Gates</label>
+                    <div class="progress-bar"><div class="fill" id="fill"></div></div>
+                    <div style="display:flex; justify-content:space-between; font-size:12px; color: var(--cyan); margin-bottom: 10px;">
+                        <span id="step-info">Gate: 0 / 5</span>
+                        <span id="percent">0%</span>
+                    </div>
+                    <button class="btn" id="unlockBtn" onclick="unlock()">Unlock Gate ➔</button>
                 </div>
-                <button class="btn" id="unlockBtn" onclick="unlock()">UNLOCK GATE ➔</button>
             </div>
 
-            <div id="final-step" class="box" style="border-color: var(--red);">
-                <label>VERIFICATION REQUIRED</label>
-                <button class="btn social-btn" onclick="socialAction('tg')">JOIN TELEGRAM</button>
-                <button class="btn social-btn" onclick="socialAction('yt')">SUBSCRIBE YOUTUBE</button>
-                <button class="btn" id="finalAccessBtn" disabled onclick="finalRedirect()">GET ACCESS LINK</button>
-            </div>
-
-            <div class="notice">
-                <b style="color: var(--red);">নির্দেশনা:</b> ৫টি গেট আনলক করার পর আমাদের সোশ্যাল চ্যানেলে জয়েন ও সাবস্ক্রাইব করলে লিঙ্কটি ওপেন হবে।
+            <div id="social-gate" class="box" style="border-color: var(--red);">
+                <label>Final Verification</label>
+                <button id="tgBtn" class="btn social-btn" onclick="doSocial('tg')">Join Telegram</button>
+                <button id="ytBtn" class="btn social-btn" onclick="doSocial('yt')">Subscribe YouTube</button>
+                <button id="finalBtn" class="btn" disabled onclick="goFinal()">Access Granted ➔</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-    const AD = "https://otieu.com/4/10492846";
-    const TG_LINK = "https://t.me/proappslinkbd";
-    const YT_LINK = "https://youtube.com/@skobaidurrahman1?si=GesbHBzDJYJy_JsS";
-    const TOTAL_STEPS = 5;
-    let currentStep = 0;
-    let tgJoined = false;
-    let ytSubscribed = false;
+    const AD_LINK = "https://otieu.com/4/10492846";
+    const TOTAL_GATES = 5;
 
-    // Matrix Effect
-    const canvas = document.getElementById('matrix');
-    const ctx = canvas.getContext('2d');
+    let currentStep = 0, tgDone = false, ytDone = false, targetData = { url: "", yt: "", tg: "" };
+
+    const canvas = document.getElementById('matrix'), ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-    const chars = "01PROAPPS";
-    const fontSize = 14;
-    const drops = Array(Math.floor(canvas.width / fontSize)).fill(1);
+    const chars = "01PROAPPS", fontSize = 14, drops = Array(Math.floor(canvas.width / fontSize)).fill(1);
     function draw() {
         ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "#0F0"; ctx.font = fontSize + "px monospace";
@@ -108,12 +110,24 @@
     setInterval(draw, 50);
 
     function generate() {
-        const val = document.getElementById('urlInput').value;
-        if(val.includes("http")) {
-            const base = window.location.href.split('?')[0];
-            document.getElementById('output').value = base + "?secure=" + btoa(val);
-            document.getElementById('res-ui').style.display = 'block';
-        } else { alert("Error: Invalid URL"); }
+        const url = document.getElementById('urlInput').value;
+        const yt = document.getElementById('ytInput').value;
+        const tg = document.getElementById('tgInput').value;
+        
+        if(!url.includes("http")) {
+            alert("Error: Target Content Link is required!");
+            return;
+        }
+        
+        if(!yt.includes("http") && !tg.includes("http")) {
+            alert("Error: Please provide at least one social link (YouTube or Telegram)!");
+            return;
+        }
+
+        const base = window.location.href.split('?')[0];
+        const data = btoa(JSON.stringify({ u: url, y: yt, t: tg }));
+        document.getElementById('output').value = base + "?secure=" + data;
+        document.getElementById('res-ui').style.display = 'block';
     }
 
     function copy() {
@@ -125,70 +139,80 @@
     window.onload = function() {
         const p = new URLSearchParams(window.location.search);
         if(p.has('secure')) {
-            document.getElementById('gen-ui').style.display = 'none';
-            document.getElementById('target-ui').style.display = 'block';
+            try {
+                const decoded = JSON.parse(atob(p.get('secure')));
+                targetData.url = decoded.u; 
+                targetData.yt = decoded.y; 
+                targetData.tg = decoded.t;
+                
+                // Initialize verification status if link is missing
+                if(!targetData.yt) ytDone = true;
+                if(!targetData.tg) tgDone = true;
+
+                document.getElementById('gen-ui').style.display = 'none';
+                document.getElementById('target-ui').style.display = 'block';
+            } catch(e) { alert("Invalid Data"); }
         }
     };
 
     function unlock() {
+        window.open(AD_LINK, "_blank");
         const btn = document.getElementById('unlockBtn');
-        window.open(AD, "_blank");
-        
-        btn.disabled = true;
-        let count = 5;
-        btn.innerText = `WAITING ${count}s...`;
-
+        btn.disabled = true; let count = 5;
         const timer = setInterval(() => {
-            count--;
-            if(count > 0) { btn.innerText = `WAITING ${count}s...`; }
-            else { 
-                clearInterval(timer); 
-                btn.disabled = false;
-                btn.innerText = "CONFIRM GATE ➔";
-                btn.onclick = process;
+            btn.innerText = `Waiting ${count}s...`; count--;
+            if(count < 0) {
+                clearInterval(timer); btn.disabled = false;
+                btn.innerText = "Confirm Gate ➔"; btn.onclick = process;
             }
         }, 1000);
     }
 
     function process() {
-        const btn = document.getElementById('unlockBtn');
-        currentStep++;
-        let prog = (currentStep / TOTAL_STEPS) * 100;
-        
-        document.getElementById('step-info').innerText = "GATE: " + currentStep + " / " + TOTAL_STEPS;
+        currentStep++; let prog = (currentStep / TOTAL_GATES) * 100;
+        document.getElementById('step-info').innerText = `Gate: ${currentStep} / ${TOTAL_GATES}`;
         document.getElementById('percent').innerText = Math.round(prog) + "%";
         document.getElementById('fill').style.width = prog + "%";
-
-        if(currentStep === TOTAL_STEPS) {
-            document.getElementById('unlock-box').style.display = 'none';
-            document.getElementById('final-step').style.display = 'block';
+        if(currentStep === TOTAL_GATES) {
+            document.getElementById('gate-area').style.display = 'none';
+            document.getElementById('social-gate').style.display = 'block';
+            
+            if(targetData.yt) document.getElementById('ytBtn').classList.add('active');
+            if(targetData.tg) document.getElementById('tgBtn').classList.add('active');
+            
+            checkCompletion();
         } else {
-            btn.innerText = "UNLOCK NEXT GATE ➔";
-            btn.onclick = unlock;
+            const btn = document.getElementById('unlockBtn');
+            btn.innerText = "Unlock Next Gate ➔"; btn.onclick = unlock;
         }
     }
 
-    function socialAction(type) {
-        if(type === 'tg') {
-            window.open(TG_LINK, "_blank");
-            tgJoined = true;
-        } else if(type === 'yt') {
-            window.open(YT_LINK, "_blank");
-            ytSubscribed = true;
+    function doSocial(type) {
+        if(type === 'yt') { 
+            window.open(targetData.yt, "_blank"); 
+            ytDone = true; 
+            document.getElementById('ytBtn').classList.add('ok'); 
+            document.getElementById('ytBtn').innerText = "Subscribed ✓"; 
         }
-        
-        if(tgJoined && ytSubscribed) {
-            const fBtn = document.getElementById('finalAccessBtn');
-            fBtn.disabled = false;
-            fBtn.style.borderColor = "var(--neon)";
-            fBtn.style.color = "var(--neon)";
+        else if(type === 'tg') { 
+            window.open(targetData.tg, "_blank"); 
+            tgDone = true; 
+            document.getElementById('tgBtn').classList.add('ok'); 
+            document.getElementById('tgBtn').innerText = "Joined ✓"; 
+        }
+        checkCompletion();
+    }
+
+    function checkCompletion() {
+        if(ytDone && tgDone) { 
+            const f = document.getElementById('finalBtn'); 
+            f.disabled = false; 
+            f.style.borderColor = "var(--neon)"; 
+            f.style.color = "var(--neon)"; 
         }
     }
 
-    function finalRedirect() {
-        const p = new URLSearchParams(window.location.search);
-        window.location.href = atob(p.get('secure'));
-    }
+    function goFinal() { window.location.href = targetData.url; }
 </script>
 </body>
 </html>
